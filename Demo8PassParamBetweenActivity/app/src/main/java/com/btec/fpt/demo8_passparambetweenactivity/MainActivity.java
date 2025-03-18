@@ -1,5 +1,7 @@
 package com.btec.fpt.demo8_passparambetweenactivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.content.Intent;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
+// Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 } else {
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("USER_EMAIL", email);
+                    editor.apply();  // Save changes asynchronously
+
                     // Pass the email to UserDetailActivity
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.putExtra("USER_EMAIL", email);  // Sending email as parameter
